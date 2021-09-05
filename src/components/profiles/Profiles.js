@@ -11,20 +11,25 @@ const Profiles = () => {
   const loading = useSelector(state => state.profile.loading)
   const dispatch = useDispatch()
     const employeeData = []
+    let showEmployees = []
+
+    console.log(employeeData)
 
     if(profiles && profiles.data){
-      for (const value of Object.values(profiles.data)) {
-        employeeData.push(value)
-      }
+     Object.values(profiles.data).map((value,index)=>{
+      value.email = `${value.firstName}${Math.floor(Math.random()*(999-100+1)+100)}@ahfc.com`
+      employeeData.push(value)
+     })
     }
     const [pageNo, setPageNo] = useState(1)
     
     
     useEffect(()=>{
-      dispatch(getAllProfiles(pageNo))
-  },[getAllProfiles,pageNo])
-  
-
+      dispatch(getAllProfiles())
+    },[])
+  console.log(pageNo)
+  showEmployees = employeeData.slice(10*(pageNo - 1),pageNo*10)
+  console.log({showEmployees})
 
     return (
       <Fragment>
@@ -46,19 +51,18 @@ const Profiles = () => {
             <th>Name</th>
             {/* <th>Employee Id</th> */}
             <th>Email</th>
-            <th>Company</th>
+            {/*<th>Company</th>*/}
             </tr>
-            {employeeData.length >0 ? employeeData.map((profile,index)=> (
+            {showEmployees.length > 0 ? showEmployees.map((profile,index)=> (
             <tr>
               <td>{pageNo * 10 + index+1 - 10}</td>
               <td className="name">
-              <Link to={`/profile/${profile.id}`} > <img style={{width:"3rem",height:"3rem",borderRadius:"50%"}} src={profile.picture} alt="dp" />
-               </Link>
-             <span> {profile.title.charAt(0).toUpperCase()+profile.title.substring(1)} {profile.firstName} {profile.lastName}</span>
+              <img style={{width:"3rem",height:"3rem",borderRadius:"50%"}} src={profile.picture} alt="dp" />
+               <Link to={`/profile/${profile.id}`} > <span> {profile.title.charAt(0).toUpperCase()+profile.title.substring(1)} {profile.firstName} {profile.lastName}</span></Link>
               </td>
               {/* <td>{profile.id}</td> */}
               <td>{profile.email}</td>
-              <td>TCS</td>
+              {/*<td>Google</td>*/}
               </tr> 
              
              
@@ -69,11 +73,10 @@ const Profiles = () => {
           <div className="pagination">
           <button disabled={pageNo === 1 ? true : false} onClick={()=>setPageNo(pageNo=>pageNo - 1)}>
           <i class="fas fa-arrow-left"></i> Prev Page</button>
-          {/* <p>Page No : {pageNo}</p> */}
-          <p className="page-container">{[1,2,3,4,5,6,7,8,9].map(num=> (
+          <p className="page-container">{[1,2,3,4,5].map(num=> (
            <span> {num === pageNo ? <span className="current-page">{pageNo}</span> : <span className="pages" onClick={()=>setPageNo(num)}>{num}</span>}</span>
           ))}</p>
-          <button disabled={pageNo === 9 ? true : false} onClick={()=>setPageNo(pageNo=>pageNo + 1)}>Next Page <i class="fas fa-arrow-right"></i></button>
+          <button disabled={pageNo === 5 ? true : false} onClick={()=>setPageNo(pageNo=>pageNo + 1)}>Next Page <i class="fas fa-arrow-right"></i></button>
           </div>
           </div>
         )

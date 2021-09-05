@@ -28,7 +28,7 @@ const Navbar = () => {
         <div>
             <nav className="navbar bg-dark">
                 <h1>
-                    <Link to="/">TCS </Link>
+                    <Link to="/">Employee App </Link>
                 </h1>
               {!loading && <Fragment> {isAuthenticated? authLinks : guestLinks} </Fragment>}
             </nav>
